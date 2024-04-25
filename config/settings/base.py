@@ -79,8 +79,8 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "rest_framework",
     "rest_framework.authtoken",
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
     "corsheaders",
     "drf_spectacular",
 ]
@@ -292,7 +292,7 @@ SOCIALACCOUNT_FORMS = {"signup": "montachat.users.forms.UserSocialSignupForm"}
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.TokenAuthentication",
+        "montachat.users.authentication.BearerTokenAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -310,8 +310,10 @@ SPECTACULAR_SETTINGS = {
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SCHEMA_PATH_PREFIX": "/api/",
 }
-REST_AUTH_REGISTER_SERIALIZERS = {
-        'REGISTER_SERIALIZER': 'montachat.users.api.serializers.MontaRegisterSerializer',
+REST_AUTH = {
+    "REGISTER_SERIALIZER": "montachat.users.api.serializers.MontaRegisterSerializer",
+    "LOGIN_SERIALIZER": "montachat.users.api.serializers.MontaLoginSerializer",
+    "USER_DETAILS_SERIALIZER": "montachat.users.api.serializers.MontaUserDetailsSerializer",
 }
 OPENAI_API_KEY = env.str("OPENAI_API_KEY", default="<SECRET>")
-
+OPENAI_MODEL = env.str("OPENAI_MODEL", default="gpt-3.5-turbo")

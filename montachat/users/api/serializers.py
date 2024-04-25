@@ -1,4 +1,6 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import LoginSerializer
+from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 from rest_framework.fields import CharField
 
@@ -17,11 +19,36 @@ class UserSerializer(serializers.ModelSerializer[User]):
 
 class MontaRegisterSerializer(RegisterSerializer):
     username = None
-    name = CharField(allow_blank=False, label='Name of User', max_length=255, required=True)
+    name = CharField(
+        allow_blank=False,
+        label="Name of User",
+        max_length=255,
+        required=True,
+    )
 
-    def get_cleaned_data(self):
-        print("Cleaning")
-        return {
-            **super().get_cleaned_data(),
-            'name': self.validated_data.get('name', ''),
-        }
+    def save(self, request):
+        user = super().save(request)
+        user.name = self.validated_data["name"]
+        user.save()
+        return user
+
+
+class MontaLoginSerializer(LoginSerializer):
+    username = None
+
+
+class MontaUserDetailsSerializer(UserDetailsSerializer):
+    name = CharField(
+        allow_blank=False,
+        label="Name of User",
+        max_length=255,
+        required=True,
+    )
+    first_name = None
+    last_name = None
+
+    class Meta:
+        model = User
+        fields = ("name", "id", "email")
+        read_only_fields = ("id", "email")
+        write_only_fields = ("password",)
