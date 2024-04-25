@@ -17,7 +17,7 @@ class MessageSerializer(serializers.ModelSerializer[Message]):
 
     class Meta:
         model = Message
-        fields = ("conversation", "text", "id", "replies", "created")
+        fields = ("id", "conversation", "text", "created", "replies")
         read_only_fields = ("id", "replies")
 
     def validate_conversation(self, conversation):
