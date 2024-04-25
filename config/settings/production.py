@@ -12,7 +12,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list(
     "DJANGO_ALLOWED_HOSTS",
-    default=["https://eibrahim95.pythonanywhere.com/"],
+    default=[],
 )
 
 # DATABASES
@@ -50,7 +50,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
 DEFAULT_FROM_EMAIL = env(
     "DJANGO_DEFAULT_FROM_EMAIL",
-    default="MontaChat <eibrahim95@gmail.com/>",
+    default="",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
@@ -127,7 +127,7 @@ LOGGING = {
 # Tools that generate code samples can use SERVERS to point to the correct domain
 SPECTACULAR_SETTINGS["SERVERS"] = [
     {
-        "url": "https://https://eibrahim95.pythonanywhere.com/",
+        "url": "https://montachat-app-vnr6b5ia4a-uc.a.run.app",
         "description": "Production server",
     },
 ]

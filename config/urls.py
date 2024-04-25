@@ -1,4 +1,10 @@
 # ruff: noqa
+from dj_rest_auth.views import (
+    LoginView,
+    LogoutView,
+    UserDetailsView,
+    PasswordChangeView,
+)
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -37,9 +43,15 @@ urlpatterns += [
     path("api/v1/", include("config.api_router")),
     # DRF auth token
     # path("api/auth-token/", obtain_auth_token),
-    path("api/v1/", include("dj_rest_auth.urls")),
+    path("api/v1/login/", LoginView.as_view(), name="rest_login"),
+    path("api/v1/logout/", LogoutView.as_view(), name="rest_logout"),
+    path("api/v1/user/", UserDetailsView.as_view(), name="rest_user_details"),
+    path(
+        "api/v1/password/change/",
+        PasswordChangeView.as_view(),
+        name="rest_password_change",
+    ),
     path("api/v1/register/", include("dj_rest_auth.registration.urls")),
-    # path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path("api/v1/", include("montachat.apidocs.urls")),
 ]
 
