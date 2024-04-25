@@ -79,7 +79,6 @@ class MessageViewSet(
             {
                 "role": "user",
                 "content": serializer.validated_data.get("text"),
-                "name": conversation.user.name,
             },
         )
         try:
