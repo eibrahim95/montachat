@@ -22,6 +22,9 @@ class Message(TimeStampedModel):
     )
     text = models.TextField(max_length=1000, null=False, blank=False)
 
+    class Meta:
+        ordering = ("-created",)
+
 
 class Reply(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

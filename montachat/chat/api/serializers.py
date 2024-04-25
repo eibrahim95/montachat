@@ -8,7 +8,7 @@ from montachat.chat.models import Reply
 class ReplySerializer(serializers.ModelSerializer[Reply]):
     class Meta:
         model = Reply
-        fields = ("text", "id")
+        fields = ("id", "text", "created")
         read_only_fields = ("id",)
 
 
@@ -17,7 +17,7 @@ class MessageSerializer(serializers.ModelSerializer[Message]):
 
     class Meta:
         model = Message
-        fields = ("conversation", "text", "id", "replies")
+        fields = ("conversation", "text", "id", "replies", "created")
         read_only_fields = ("id", "replies")
 
     def validate_conversation(self, conversation):
@@ -29,10 +29,25 @@ class MessageSerializer(serializers.ModelSerializer[Message]):
         return conversation
 
 
+class MessageDetailsSerializer(serializers.ModelSerializer[Message]):
+    replies = ReplySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ("id", "text", "replies", "created")
+
+
 class ConversationSerializer(serializers.ModelSerializer[Conversation]):
+    class Meta:
+        model = Conversation
+        fields = ("title", "id", "created")
+        read_only_fields = ("id",)
+
+
+class ConversationDetailsSerializer(ConversationSerializer):
     messages = MessageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Conversation
-        fields = ("title", "id", "messages")
+        fields = ("title", "id", "created", "messages")
         read_only_fields = ("id", "messages")

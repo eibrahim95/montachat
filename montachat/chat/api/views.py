@@ -2,14 +2,17 @@ import logging
 
 from django.conf import settings
 from openai import OpenAI
+from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.mixins import UpdateModelMixin
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from montachat.chat.api.serializers import ConversationSerializer
+from montachat.chat.api.serializers import MessageDetailsSerializer
 from montachat.chat.api.serializers import MessageSerializer
 from montachat.chat.models import Conversation
 from montachat.chat.models import Message
@@ -24,7 +27,7 @@ class ConversationViewSet(
     GenericViewSet,
 ):
     serializer_class = ConversationSerializer
-    queryset = Conversation.objects.all()
+    queryset = Conversation.objects.order_by("-created").all()
     lookup_field = "pk"
 
     def get_queryset(self):
@@ -33,15 +36,25 @@ class ConversationViewSet(
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    @action(detail=True)
+    def messages(self, request, pk=None):
+        queryset = Message.objects.filter(conversation__pk=pk)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = MessageDetailsSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = MessageDetailsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class MessageViewSet(
-    RetrieveModelMixin,
-    ListModelMixin,
     CreateModelMixin,
     GenericViewSet,
 ):
     serializer_class = MessageSerializer
-    queryset = Message.objects.all()
+    queryset = Message.objects.order_by("-created").all()
     lookup_field = "pk"
 
     def get_queryset(self):
