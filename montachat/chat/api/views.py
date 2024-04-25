@@ -67,7 +67,7 @@ class MessageViewSet(
         messages = []
         for msg in conversation_history:
             messages.append(
-                {"role": "user", "content": msg.text, "name": conversation.user.name},
+                {"role": "user", "content": msg.text},
             )
             messages.extend(
                 [
