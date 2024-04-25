@@ -1,3 +1,6 @@
+from allauth.account import app_settings as allauth_account_settings
+from allauth.account.adapter import get_adapter
+from allauth.account.models import EmailAddress
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import LoginSerializer
 from dj_rest_auth.serializers import UserDetailsSerializer
@@ -25,6 +28,16 @@ class MontaRegisterSerializer(RegisterSerializer):
         max_length=255,
         required=True,
     )
+
+    def validate_email(self, email):
+        email = get_adapter().clean_email(email)
+        if allauth_account_settings.UNIQUE_EMAIL:
+            if email and EmailAddress.objects.filter(email=email).last():
+                error_message = "A user is already registered with this e-mail address."
+                raise serializers.ValidationError(
+                    error_message,
+                )
+        return email
 
     def save(self, request):
         user = super().save(request)

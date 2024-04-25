@@ -34,13 +34,13 @@ if settings.DEBUG:
 # API URLS
 urlpatterns += [
     # API base url
-    path("api/", include("config.api_router")),
+    path("api/v1/", include("config.api_router")),
     # DRF auth token
     # path("api/auth-token/", obtain_auth_token),
-    path('api/', include('dj_rest_auth.urls')),
-    path('api/register/', include('dj_rest_auth.registration.urls')),
+    path("api/v1/", include("dj_rest_auth.urls")),
+    path("api/v1/register/", include("dj_rest_auth.registration.urls")),
     # path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('api/', include('montachat.apidocs.urls')),
+    path("api/v1/", include("montachat.apidocs.urls")),
 ]
 
 if settings.DEBUG:
